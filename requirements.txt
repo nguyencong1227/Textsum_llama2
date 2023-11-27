@@ -1,0 +1,9 @@
+langchain==0.0.191
+llama-cpp-python==0.1.66
+sentence-transformers
+huggingface_hub
+auto-gptq==0.2.2
+termcolor
+rouge
+optimum
+
