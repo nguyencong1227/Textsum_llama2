@@ -56,4 +56,5 @@ def process_wonders_data():
     df = pd.DataFrame(data, columns=["wonder_city", "information", "num_tokens"])
     df["cleaned_information"] = df["information"].apply(clean_text)
     df["token_count"] = df["cleaned_information"].apply(count_tokens)
-    return df
+    beirut_data = df[df["wonder_city"] == "Beirut"].copy()
+    return beirut_data
