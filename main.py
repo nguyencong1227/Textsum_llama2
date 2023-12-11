@@ -29,29 +29,32 @@ from load_model import load_model
 from text_processing import fetch_and_save_wiki_text, clean_text, count_tokens, process_wonders_data
 from summary_generator import generate_summary
 from summary_processing import process_summaries
-
+from result_display import display_result
 
 
 def main():
-    # Configurations
-    DEVICE_TYPE = "cuda" if torch.cuda.is_available() else "cpu"
-    SHOW_SOURCES = True
-    logging.info(f"Running on: {DEVICE_TYPE}")
-    logging.info(f"Display Source Documents set to: {SHOW_SOURCES}")
+    # # Configurations
+    # DEVICE_TYPE = "cuda" 
+    # #if torch.cuda.is_available() else "cpu"
+    # SHOW_SOURCES = True
+    # logging.info(f"Running on: {DEVICE_TYPE}")
+    # logging.info(f"Display Source Documents set to: {SHOW_SOURCES}")
 
-    # Model configurations
-    model_id = "TheBloke/Llama-2-7B-Chat-GGML"
-    model_basename = "llama-2-7b-chat.ggmlv3.q4_0.bin"
-    tokenizer = LongformerTokenizer.from_pretrained("allenai/longformer-base-4096")
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=4096, chunk_overlap=50, length_function=len)
-    LLM = load_model(device_type=DEVICE_TYPE, model_id=model_id, model_basename=model_basename)
+    # # Model configurations
+    # model_id = "vinai/PhoGPT-7B5-Instruct"
+    # model_basename = "llama-2-7b-chat.ggmlv3.q4_0.bin"
+    # tokenizer = LongformerTokenizer.from_pretrained("allenai/longformer-base-4096")
+    # text_splitter = RecursiveCharacterTextSplitter(chunk_size=4096, chunk_overlap=50, length_function=len)
+    # LLM = load_model(device_type=DEVICE_TYPE, model_id=model_id, model_basename=None)
     
     wonders_df = process_wonders_data()
-    processed_df = process_summaries(wonders_df, text_splitter, LLM)
-
-    # Example usage of LLM
-    # result = LLM("Your input text goes here", sources=["Source document 1", "Source document 2"])
-    # print(result)
+    print(wonders_df.head())
+    # processed_df = process_summaries(wonders_df, text_splitter, LLM)
+    # selected_columns = processed_df[["wonder_city", "summary"]]
+    # for index, row in selected_columns.iterrows():
+    #     wonder_city = row["wonder_city"]
+    #     summary = row["summary"]
+    #     display_result(wonder_city, summary)
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,5 @@
 import logging
+import torch
 from huggingface_hub import hf_hub_download
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig, pipeline, LlamaTokenizer
 from auto_gptq import AutoGPTQForCausalLM, BaseQuantizeConfig
@@ -77,10 +78,14 @@ def load_model(device_type, model_id, model_basename=None):
         model=model,
         tokenizer=tokenizer,
         max_length=2048,
-        temperature=0,
+        temperature=1,
+        top_k=50,
         top_p=0.95,
         repetition_penalty=1.15,
         generation_config=generation_config,
+        do_sample=True,
+        eos_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.pad_token_id,
     )
 
     local_llm = HuggingFacePipeline(pipeline=pipe)

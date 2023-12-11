@@ -6,4 +6,4 @@ auto-gptq==0.2.2
 termcolor
 rouge
 optimum
-
+einops

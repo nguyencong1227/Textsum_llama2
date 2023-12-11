@@ -8,7 +8,7 @@ tokenizer = LongformerTokenizer.from_pretrained("allenai/longformer-base-4096")
 
 def fetch_and_save_wiki_text(title):
     response = requests.get(
-        "https://en.wikipedia.org/w/api.php",
+        "https://vi.wikipedia.org/w/api.php",
         params={
             "action": "query",
             "format": "json",
@@ -23,14 +23,24 @@ def fetch_and_save_wiki_text(title):
 
     return wiki_text
 
+# def clean_text(text):
+#     # Remove special characters except "."
+#     text = re.sub(r'[^A-Za-z0-9\s.\(\)\[\]\{\}]+', '', text)
+#     # Convert to lowercase
+#     text = text.lower()
+#     # Remove extra whitespace
+#     text = ' '.join(text.split())
+#     return text
+
 def clean_text(text):
-    # Remove special characters except "."
-    text = re.sub(r'[^A-Za-z0-9\s.\(\)\[\]\{\}]+', '', text)
+    # Remove special characters except ".", and Vietnamese characters (both uppercase and lowercase)
+    text = re.sub(r'[^A-Za-z0-9\s.\(\)\[\]\{\}ÀàÁáẢảÃãẠạÂâẦầẤấẨẩẪẫẬậĂăẰằẮắẲẳẴẵẶặÀàÁáẢảÃãẠạÂâẦầẤấẨẩẪẫẬậĂăẰằẮắẲẳẴẵẶặÈèÉéẺẻẼẽẸẹÊêỀềẾếỂểỄễỆệÈèÉéẺẻẼẽẸẹÊêỀềẾếỂểỄễỆệÌìÍíỈỉĨĩỊịÌìÍíỈỉĨĩỊịÒòÓóỎỏÕõỌọÔôỒồỐốỔổỖỗỘộƠơỜờỚớỞởỠỡỢợÒòÓóỎỏÕõỌọÔôỒồỐốỔổỖỗỘộƠơỜờỚớỞởỠỡỢợÙùÚúỦủŨũỤụƯưỪứỬửỮữỰựÙùÚúỦủŨũỤụƯưỪứỬửỮữỰựỲỳÝýỶỷỸỹỴỵỲỳÝýỶỷỸỹỴỵĐđ]+', '', text)
     # Convert to lowercase
     text = text.lower()
     # Remove extra whitespace
     text = ' '.join(text.split())
     return text
+
 
 def count_tokens(text):
     tokens = tokenizer.encode(text, add_special_tokens=True)
@@ -57,4 +67,6 @@ def process_wonders_data():
     df["cleaned_information"] = df["information"].apply(clean_text)
     df["token_count"] = df["cleaned_information"].apply(count_tokens)
     beirut_data = df[df["wonder_city"] == "Beirut"].copy()
+    first_2000_tokens = beirut_data["cleaned_information"].str[:2000]
+    beirut_data["cleaned_information"] = first_2000_tokens
     return beirut_data
